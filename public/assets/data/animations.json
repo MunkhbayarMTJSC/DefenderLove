@@ -1,0 +1,79 @@
+[
+  {
+    "key": "bullet",
+    "frameRate": 12,
+    "repeat": -1,
+    "assetKey": "bullet"
+  },
+  {
+    "key": "fighter_engine",
+    "frameRate": 12,
+    "repeat": -1,
+    "assetKey": "fighter_engine"
+  },
+  {
+    "key": "scout_move",
+    "frames": [0, 1, 2, 3],
+    "frameRate": 12,
+    "repeat": -1,
+    "assetKey": "scout_move"
+  },
+  {
+    "key": "scout_destroy",
+    "frames": [3, 4, 5, 6, 7, 8],
+    "frameRate": 12,
+    "repeat": 0,
+    "assetKey": "scout_destroy"
+  },
+  {
+    "key": "explosion",
+    "frames": [4, 5, 6, 7, 8, 9],
+    "frameRate": 12,
+    "repeat": 0,
+    "assetKey": "scout_destroy"
+  },
+  {
+    "key": "player_move",
+    "frameRate": 12,
+    "repeat": -1,
+    "assetKey": "player_move"
+  },
+  {
+    "key": "princess_idle",
+    "frames": [0, 1, 2, 3],
+    "frameRate": 20,
+    "repeat": -1,
+    "assetKey": "princess_anims"
+  },
+  {
+    "key": "princess_run",
+    "frames": [18, 19, 20, 21, 22, 23],
+    "frameRate": 20,
+    "repeat": -1,
+    "assetKey": "princess_anims"
+  },
+  {
+    "key": "fighter_destroy",
+    "frameRate": 12,
+    "repeat": 0,
+    "assetKey": "fighter_destroy"
+  },
+  {
+    "key": "bg1",
+    "frameRate": 8,
+    "repeat": -1,
+    "assetKey": "bg1"
+  },
+  {
+    "key": "bg2",
+    "frameRate": 8,
+    "repeat": -1,
+    "assetKey": "bg2"
+  },
+  {
+    "key": "bg3",
+    "frameRate": 8,
+    "repeat": -1,
+    "assetKey": "bg3"
+  }
+]

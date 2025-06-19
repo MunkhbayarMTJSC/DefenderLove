@@ -4,18 +4,9 @@ import { InputComponent } from '../input/input-component.js';
 import * as CONFIG from '../../config.js';
 
 export class HorizontalMovementComponent {
-  /** @type {Phaser.Physics.Arcade.Sprite | Phaser.GameObjects.Container} */
   #gameObject;
-  /** @type {InputComponent} */
   #inputComponent;
-  /** @type {number} */
   #velocity;
-
-  /**
-   * @param {Phaser.Physics.Arcade.Sprite | Phaser.GameObjects.Container} gameObject
-   * @param {InputComponent} inputComponent
-   * @param {number} velocity
-   */
   constructor(gameObject, inputComponent, velocity) {
     this.#gameObject = gameObject;
     this.#inputComponent = inputComponent;

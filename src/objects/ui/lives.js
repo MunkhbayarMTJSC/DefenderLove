@@ -1,19 +1,10 @@
 import { CUSTOM_EVENTS, EventBusComponent } from '../../components/events/event-bus-component.js';
 import * as CONFIG from '../../config.js';
 
-/**
- * Simple UI component for presenting the players lives in the UI of our game.
- */
 export class Lives extends Phaser.GameObjects.Container {
-  /** @type {number} */
   #lives;
-  /** @type {EventBusComponent} */
   #eventBusComponent;
 
-  /**
-   * @param {Phaser.Scene} scene
-   * @param {EventBusComponent} eventBusComponent
-   */
   constructor(scene, eventBusComponent) {
     super(scene, 5, scene.scale.height - 30, []);
     this.#eventBusComponent = eventBusComponent;
@@ -23,7 +14,7 @@ export class Lives extends Phaser.GameObjects.Container {
     // create life icons
     for (let i = 0; i < this.#lives; i += 1) {
       const ship = scene.add
-        .image(i * 20, 0, 'ship')
+        .image(i * 20, 0, 'heart')
         .setScale(0.6)
         .setOrigin(0);
       this.add(ship);

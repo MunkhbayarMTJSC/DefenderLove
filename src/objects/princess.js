@@ -2,6 +2,8 @@ import { ColliderComponent } from '../components/collider/collider-component.js'
 // @ts-ignore
 import { CUSTOM_EVENTS, EventBusComponent } from '../components/events/event-bus-component.js';
 import { HealthComponent } from '../components/health/health-component.js';
+import { HorizontalMovementComponent } from '../components/movement/horizontal-movement-component.js';
+import { AIInputComponent } from '../components/input/ai-input-componetn.js';
 import * as CONFIG from '../config.js';
 
 /**
@@ -11,6 +13,8 @@ import * as CONFIG from '../config.js';
 export class Princess extends Phaser.GameObjects.Container {
   #healthComponent;
   #colliderComponent;
+  #customAI;
+  #horizontalMove;
   #eventBusComponent;
   #princessSprite;
 
@@ -29,12 +33,18 @@ export class Princess extends Phaser.GameObjects.Container {
     this.body.setCollideWorldBounds(true);
     this.setDepth(2);
 
-    this.#princessSprite = scene.add.sprite(0, 0, 'princess_idle');
+    this.#princessSprite = scene.add.sprite(0, 0, 'princess_idle').setScale(1.5);
     this.#princessSprite.play('princess_idle');
     this.add(this.#princessSprite);
 
     this.#healthComponent = new HealthComponent(CONFIG.PRINCESS_HEALTH);
     this.#colliderComponent = new ColliderComponent(this.#healthComponent, this.#eventBusComponent);
+    this.#customAI = new AIInputComponent();
+    this.#horizontalMove = new HorizontalMovementComponent(
+      this,
+      this.#customAI,
+      CONFIG.PLAYER_MOVEMENT_HORIZONTAL_VELOCITY
+    );
 
     this.#hide();
 
@@ -66,7 +76,8 @@ export class Princess extends Phaser.GameObjects.Container {
     if (!this.active) {
       return;
     }
-
+    this.#customAI.update(dt);
+    this.#horizontalMove;
     if (this.#healthComponent.isDead) {
       this.#hide();
       this.setVisible(true);
@@ -75,6 +86,16 @@ export class Princess extends Phaser.GameObjects.Container {
       });
       this.#eventBusComponent.emit(CUSTOM_EVENTS.PRINCESS_DESTROYED);
       return;
+    }
+    this.#customAI.update(dt);
+    this.#horizontalMove.update();
+    const direction = this.#customAI.direction;
+    if (direction === 'left') {
+      this.#princessSprite.play('princess_run', true);
+    } else if (direction === 'right') {
+      this.#princessSprite.play('princess_run', true);
+    } else {
+      this.#princessSprite.play('princess_idle', true);
     }
   }
 

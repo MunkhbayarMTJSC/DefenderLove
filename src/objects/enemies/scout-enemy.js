@@ -14,7 +14,7 @@ export class ScoutEnemy extends Phaser.GameObjects.Container {
   #healthComponent;
   #colliderComponent;
   #eventBusComponent;
-  #shipSprite;
+  #scoutSprite;
   #shipEngineSprite;
 
   constructor(scene, x, y) {
@@ -28,10 +28,9 @@ export class ScoutEnemy extends Phaser.GameObjects.Container {
     // @ts-ignore
     this.body.setOffset(-12, -12);
 
-    this.#shipSprite = scene.add.sprite(0, 0, 'scout', 0);
-    this.#shipEngineSprite = scene.add.sprite(0, 0, 'scout_engine').setFlipY(true);
-    this.#shipEngineSprite.play('scout_engine');
-    this.add([this.#shipEngineSprite, this.#shipSprite]);
+    this.#scoutSprite = scene.add.sprite(0, 0, 'scout_move');
+    this.#scoutSprite.play('scout_move');
+    this.add(this.#scoutSprite);
 
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     this.once(
@@ -55,7 +54,7 @@ export class ScoutEnemy extends Phaser.GameObjects.Container {
 
   /** @type {string} */
   get shipAssetKey() {
-    return 'scout';
+    return 'scout_move';
   }
 
   /** @type {string} */
