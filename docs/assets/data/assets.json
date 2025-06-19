@@ -29,18 +29,13 @@
       },
       {
         "type": "image",
-        "key": "scout",
-        "url": "scout.png"
-      },
-      {
-        "type": "image",
         "key": "fighter",
         "url": "fighter.png"
       },
       {
         "type": "image",
-        "key": "ship_engine",
-        "url": "ship_engine.png"
+        "key": "heart",
+        "url": "heart.png"
       },
       {
         "type": "spritesheet",
@@ -62,9 +57,9 @@
       },
       {
         "type": "spritesheet",
-        "key": "scout_engine",
-        "url": "scout_engine.png",
-        "frameConfig": { "frameWidth": 64, "frameHeight": 64 }
+        "key": "scout_move",
+        "url": "scout.png",
+        "frameConfig": { "frameWidth": 65, "frameHeight": 65 }
       },
       {
         "type": "spritesheet",
@@ -80,9 +75,9 @@
       },
       {
         "type": "spritesheet",
-        "key": "princess_idle",
+        "key": "princess_anims",
         "url": "princess.png",
-        "frameConfig": { "frameWidth": 16, "frameHeight": 24 }
+        "frameConfig": { "frameWidth": 16, "frameHeight": 30 }
       },
       {
         "type": "spritesheet",

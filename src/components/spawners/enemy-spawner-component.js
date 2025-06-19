@@ -1,44 +1,31 @@
 import Phaser from 'phaser';
-import { CUSTOM_EVENTS, EventBusComponent } from '../events/event-bus-component.js';
+import { CUSTOM_EVENTS } from '../events/event-bus-component.js';
 
 /**
- * Creates a Phaser 3 Group that is used for spawning enemy
- * game objects in our game. This spawner component will generate
- * new enemies on an interval, and spawn those enemies in random
- * locations outside our Phaser 3 Scene.
- *
- * The Phaser 3 Group is used to create a simple object pool that allows
- * us to reuse the enemy game objects that are created.
+ * This class handles spawning enemies using an object pool.
+ * It ensures the number of enemies per level matches the config.
  */
 export class EnemySpawnerComponent {
-  /** @type {Phaser.Scene} */
   #scene;
-  /** @type {number} */
   #spawnInterval;
-  /** @type {number} */
   #spawnAt;
-  /** @type {Phaser.GameObjects.Group} */
   #group;
-  /** @type {boolean} */
   #disableSpawning;
+  #remainingCount;
+  #enemyClass;
+  #eventBusComponent;
 
-  /**
-   * @param {Phaser.Scene} scene
-   * @param {Function} enemyClass
-   * @param {object} spawnConfig
-   * @param {number} spawnConfig.interval
-   * @param {number} spawnConfig.spawnAt
-   * @param {EventBusComponent} eventBusComponent
-   */
   constructor(scene, enemyClass, spawnConfig, eventBusComponent) {
     this.#scene = scene;
+    this.#enemyClass = enemyClass;
+    this.#eventBusComponent = eventBusComponent;
 
-    // create group
+    // Create group (pool)
     this.#group = this.#scene.add.group({
       name: `${this.constructor.name}-${Phaser.Math.RND.uuid()}`,
       classType: enemyClass,
       runChildUpdate: true,
-      createCallback: (/** @type {import('../../types/typedef.js').Enemy} */ enemy) => {
+      createCallback: (enemy) => {
         enemy.init(eventBusComponent);
       },
     });
@@ -46,8 +33,9 @@ export class EnemySpawnerComponent {
     this.#spawnInterval = spawnConfig.interval;
     this.#spawnAt = spawnConfig.spawnAt;
     this.#disableSpawning = false;
+    this.#remainingCount = 0;
 
-    // handle automatic call to update
+    // Auto-update
     this.#scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
     this.#scene.physics.world.on(Phaser.Physics.Arcade.Events.WORLD_STEP, this.worldStep, this);
     this.#scene.events.once(
@@ -58,23 +46,22 @@ export class EnemySpawnerComponent {
       },
       this
     );
-    eventBusComponent.on(CUSTOM_EVENTS.GAME_OVER, () => {
+
+    // Stop spawning on game over
+    this.#eventBusComponent.on(CUSTOM_EVENTS.GAME_OVER, () => {
       this.#disableSpawning = true;
     });
   }
 
-  /** @type {Phaser.GameObjects.Group} */
   get phaserGroup() {
     return this.#group;
   }
 
   /**
-   * @param {DOMHighResTimeStamp} ts
-   * @param {number} dt
-   * @returns {void}
+   * Called every frame, handles spawning logic.
    */
   update(ts, dt) {
-    if (this.#disableSpawning) {
+    if (this.#disableSpawning || this.#remainingCount <= 0) {
       return;
     }
 
@@ -85,24 +72,58 @@ export class EnemySpawnerComponent {
 
     const x = Phaser.Math.RND.between(30, this.#scene.scale.width - 30);
     const enemy = this.#group.get(x, -20);
-    enemy.reset();
+
+    if (enemy && !enemy.active) {
+      enemy.reset();
+      this.#remainingCount--;
+    }
+
     this.#spawnAt = this.#spawnInterval;
+    if (this.#remainingCount <= 0) {
+      this.#disableSpawning = true;
+    }
   }
 
   /**
-   * @returns {void}
+   * Deactivates enemies that leave the screen.
    */
   worldStep(delta) {
-    /** @type {import('../../types/typedef.js').Enemy[]} */
-    (this.#group.getChildren()).forEach((enemy) => {
-      if (!enemy.active) {
-        return;
-      }
+    this.#group.getChildren().forEach((enemy) => {
+      if (!enemy.active) return;
 
       if (enemy.y > this.#scene.scale.height + 50) {
         enemy.setActive(false);
         enemy.setVisible(false);
       }
     });
+  }
+
+  /**
+   * Prepares enemy pool and resets spawn state for this group.
+   * Ensures exactly `count` enemies are created for the level.
+   */
+  spawnGroup(enemyInfo) {
+    console.log('spawnGroup called with:', enemyInfo);
+
+    this.#spawnInterval = enemyInfo.interval;
+    this.#spawnAt = 0;
+    this.#remainingCount = enemyInfo.count;
+    this.#disableSpawning = false;
+
+    const currentCount = this.#group.getLength();
+    const requiredCount = enemyInfo.count;
+
+    if (currentCount < requiredCount) {
+      const toCreate = requiredCount - currentCount;
+      for (let i = 0; i < toCreate; i++) {
+        const enemy = new this.#enemyClass(this.#scene, 0, 0);
+        enemy.init(this.#eventBusComponent);
+        enemy.setActive(false);
+        enemy.setVisible(false);
+        this.#group.add(enemy);
+      }
+    }
+
+    console.log(`Group prepared: ${this.#group.getLength()} total, ${this.#remainingCount} to spawn`);
   }
 }

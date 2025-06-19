@@ -114,6 +114,7 @@ export class ScoutEnemy extends Phaser.GameObjects.Container {
     if (this.#healthComponent.isDead) {
       this.setActive(false);
       this.setVisible(false);
+
       this.#eventBusComponent.emit(CUSTOM_EVENTS.ENEMY_DESTROYED, this);
     }
 

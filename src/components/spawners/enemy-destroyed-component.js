@@ -20,6 +20,9 @@ export class EnemyDestroyedComponent {
       gameObject.play({
         key: enemy.shipDestroyedAnimationKey,
       });
+      gameObject.on('animationcomplete', () => {
+        gameObject.destroy();
+      });
     });
   }
 }

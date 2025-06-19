@@ -48,39 +48,30 @@ export class FighterEnemy extends Phaser.GameObjects.Container {
     );
   }
 
-  /** @type {ColliderComponent} */
   get colliderComponent() {
     return this.#colliderComponent;
   }
 
-  /** @type {HealthComponent} */
   get healthComponent() {
     return this.#healthComponent;
   }
 
-  /** @type {Phaser.GameObjects.Group} */
   get weaponGameObjectGroup() {
     return this.#weaponComponent.bulletGroup;
   }
 
-  /** @type {WeaponComponent} */
   get weaponComponent() {
     return this.#weaponComponent;
   }
 
-  /** @type {string} */
   get shipAssetKey() {
     return 'fighter';
   }
 
-  /** @type {string} */
   get shipDestroyedAnimationKey() {
     return 'fighter_destroy';
   }
 
-  /**
-   * @param {EventBusComponent} eventBusComponent
-   */
   init(eventBusComponent) {
     this.#eventBusComponent = eventBusComponent;
     this.#inputComponent = new BotFighterInputComponent();
@@ -108,9 +99,6 @@ export class FighterEnemy extends Phaser.GameObjects.Container {
     this.#isInitialized = true;
   }
 
-  /**
-   * @returns {void}
-   */
   reset() {
     this.setActive(true);
     this.setVisible(true);
@@ -118,11 +106,6 @@ export class FighterEnemy extends Phaser.GameObjects.Container {
     this.#verticalMovementComponent.reset();
   }
 
-  /**
-   * @param {DOMHighResTimeStamp} ts
-   * @param {number} dt
-   * @returns {void}
-   */
   // @ts-ignore
   update(ts, dt) {
     if (!this.#isInitialized) {

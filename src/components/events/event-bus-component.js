@@ -9,6 +9,10 @@ export const CUSTOM_EVENTS = Object.freeze({
   SHIP_HIT: 'SHIP_HIT',
   SHIP_COLLIDE: 'SHIP_COLLIDE',
   SHIP_SHOOT: 'SHIP_SHOOT',
+  LEVEL_COMPLETE: 'LEVEL_COMPLETE',
+  LEVEL_STARTED: 'LEVEL_STARTED',
+  SPAWN_ENEMY_GROUP: 'SPAWN_ENEMY_GROUP',
+  GAME_COMPLETE: 'GAME_COMPLETE',
 });
 
 export class EventBusComponent extends Phaser.Events.EventEmitter {
