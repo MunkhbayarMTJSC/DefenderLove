@@ -70,7 +70,6 @@ export class Player extends Phaser.GameObjects.Container {
     this.#hide();
 
     // register custom events
-    console.log('object :>> ', this.#eventBusComponent);
     this.#eventBusComponent.on(CUSTOM_EVENTS.PLAYER_SPAWN, this.#spawn, this);
 
     // handle automatic call to update

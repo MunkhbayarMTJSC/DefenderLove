@@ -20,8 +20,6 @@ export class ButtonInputComponent extends InputComponent {
 
     this._left = this.#buttons.left.isDown;
     this._right = this.#buttons.right.isDown;
-    this._up = this.#buttons.up.isDown;
-    this._down = this.#buttons.down.isDown;
     this._shoot = this.#buttons.shoot.isDown;
   }
 
